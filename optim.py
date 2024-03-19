@@ -3,7 +3,7 @@ from torch.optim.optimizer import Optimizer
 import math
 
 class Fusedbun(Optimizer):
-    def __init__(self, params, lr=1e-3, eps=1e-8, beta_decay=0.8, Lambda=0.01, momentum_beta=0.9, centralize=True, use_rms=True):
+    def __init__(self, params, lr=1e-3, eps=1e-8, beta_decay=0.8, momentum_beta=0.9, centralize=True, use_rms=True):
         defaults = dict(lr=lr, eps=eps, beta_decay=beta_decay, Lambda=Lambda, momentum_beta=momentum_beta, centralize=centralize, use_rms=use_rms)
         super(Fusedbun, self).__init__(params, defaults)
     
@@ -17,7 +17,6 @@ class Fusedbun(Optimizer):
             lr = group['lr']
             eps = group['eps']
             beta_decay = group['beta_decay']
-            Lambda = group['Lambda']
             momentum_beta = group['momentum_beta']
             centralize = group['centralize']
             use_rms = group['use_rms']
