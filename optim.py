@@ -15,7 +15,7 @@ class Fusedbun(Optimizer):
             centralize (bool, optional): Boolean indicating whether to centralize gradients to have zero mean (default: True).
             use_rms (bool, optional): Boolean indicating whether to use RMSprop-like denominator normalization (default: True).
         """
-        defaults = dict(lr=lr, eps=eps, beta_decay=beta_decay, Lambad=Lambda, momentum_beta=momentum_beta, centralize=centralize, use_rms=use_rms)
+        defaults = dict(lr=lr, eps=eps, beta_decay=beta_decay, Lambda=Lambda, momentum_beta=momentum_beta, centralize=centralize, use_rms=use_rms)
         super(Fusedbun, self).__init__(params, defaults)
     
     @torch.no_grad()
