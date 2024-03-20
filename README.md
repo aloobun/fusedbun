@@ -5,7 +5,10 @@ Im still not expecting it to perform better than other optimizers. I'm learning 
 
 ## /til/devlog
 
-[19-03-2024]
+[WIP]
+- [ ] Todo: lr warmup, annealing & hessian matrix.
+
+[20-03-2024]
 - [x] Todo: Sparse Update Mechanism
 - To update parameters when their gradients surpass a specified threshold(similar to eps threshold here!?!?!)
 - ![Alt Text](https://github.com/aloobun/fusedbun/blob/main/assets/rosenbrock_Fusedbun.png?raw=true)
