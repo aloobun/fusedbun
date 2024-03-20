@@ -72,10 +72,6 @@ class Fusedbun(Optimizer):
                     exp_avg_sq = torch.where(mask, exp_avg_sq*beta_decay + (1-beta_decay)*grad.pow(2), exp_avg_sq)
                 else:
                     exp_avg_sq.mul_(beta_decay).addcmul_(grad, grad, value=1-beta_decay)
-                    # squared gradient accumulation for non-scalar parameters
-                    grad_squared = grad.square().mean(dim=0)
-                else:
-                    grad_squared = grad.square()
 
                 denom = exp_avg_sq.sqrt().add_(eps)
                 grad_normalized = grad / denom if use_rms else grad
