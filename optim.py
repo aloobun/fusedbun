@@ -57,7 +57,7 @@ class Fusedbun(Optimizer):
                     if momentum_beta > 0:
                         state['momentum_buffer'] = torch.zeros_like(p, memory_format=torch.preserve_format)
                 
-                acc = state['exp_avg_sq']
+                exp_avg_sq = state['exp_avg_sq']
                 state['step'] += 1
 
                 if momentum_beta > 0:
