@@ -35,7 +35,7 @@ class Fusedbun(Optimizer):
             lr = group['lr']
             eps = group['eps']
             beta_decay = group['beta_decay']
-            Lambda = group[‘Lambda’]
+            Lambda = group['Lambda']
             momentum_beta = group['momentum_beta']
             centralize = group['centralize']
             use_rms = group['use_rms']
