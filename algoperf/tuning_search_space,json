@@ -1,0 +1,17 @@
+{
+  "learning_rate": {
+      "min": 1e-3, "max": 4e-6, "scaling": "log"
+  },
+  "eps": {
+      "min": 1e-30, "max": 1e-8, "scaling": "log"
+  },
+  "beta_decay": {
+      "feasible_points": [0.8]
+  },
+  "Lambda": {
+      "feasible_points": [0.01]
+  },
+  "momentum_beta": {
+      "feasible_points": [0.9]
+  }
+}
