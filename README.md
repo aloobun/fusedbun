@@ -6,7 +6,7 @@ Im still not expecting it to perform better than other optimizers. I'm learning 
 ## /til/devlog
 
 [WIP]
-- [ ] Todo: lr warmup, annealing & hessian matrix.
+- [x] Todo: <strike>lr warmup, annealing & </strike> hessian matrix.
 
 [20-03-2024]
 - [x] Todo: Sparse Update Mechanism
