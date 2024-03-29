@@ -5,9 +5,13 @@ Im still not expecting it to perform better than other optimizers. I'm learning 
 
 ## /til/devlog
 
-[19-03-2024]
+[WIP]
+- [ ] Todo: lr warmup, annealing & hessian matrix.
+
+[20-03-2024]
 - [x] Todo: Sparse Update Mechanism
 - To update parameters when their gradients surpass a specified threshold(similar to eps threshold here!?!?!)
+- ![Alt Text](https://github.com/aloobun/fusedbun/blob/main/assets/rosenbrock_Fusedbun.png?raw=true)
 
 [19-03-2024]
 - The conceptual design adapts SM3’s approach to memory efficiency by maintaining compact accumulator data for each parameter(correct me if i'm wrong, but what it does is it tracks the historical magnitude of gradients for each parameter and this minimizes the meomry required to retian historical information).
