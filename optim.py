@@ -3,7 +3,7 @@ from torch.optim.optimizer import Optimizer
 import math
 
 class Fusedbun(Optimizer):
-    def __init__(self, params, lr=1e-3, eps=1e-8, beta_decay=0.8, Lambda=0.01, momentum_beta=0.9, centralize=True, use_rms=True):
+    def __init__(self, params, lr=1e-3, eps=1e-8, beta_decay=0.8, Lambda=0.01, momentum_beta=0.9, centralize=True, use_rms=True, hessian_poweriter=0):
         """
         Args:
             params (iterable): An iterable of parameters.
@@ -14,8 +14,9 @@ class Fusedbun(Optimizer):
             momentum_beta (float, optional): Coefficient for the moving average of gradients (momentum) (default: 0.9).
             centralize (bool, optional): Boolean indicating whether to centralize gradients to have zero mean (default: True).
             use_rms (bool, optional): Boolean indicating whether to use RMSprop-like denominator normalization (default: True).
+            hessian_poweriter (int, optional): Number of iterations for Hessian power approximation (default: 0, no approximation).
         """
-        defaults = dict(lr=lr, eps=eps, beta_decay=beta_decay, Lambda=Lambda, momentum_beta=momentum_beta, centralize=centralize, use_rms=use_rms)
+        defaults = dict(lr=lr, eps=eps, beta_decay=beta_decay, Lambda=Lambda, momentum_beta=momentum_beta, centralize=centralize, use_rms=use_rms, hessian_poweriter=hessian_poweriter)
         super(Fusedbun, self).__init__(params, defaults)
     
     @torch.no_grad()
@@ -39,6 +40,7 @@ class Fusedbun(Optimizer):
             momentum_beta = group['momentum_beta']
             centralize = group['centralize']
             use_rms = group['use_rms']
+            hessian_poweriter = group['hessian_poweriter']
             
             for p in group['params']:
                 if p.grad is None:
@@ -56,6 +58,8 @@ class Fusedbun(Optimizer):
                     state['exp_avg_sq'] = torch.zeros_like(p, memory_format=torch.preserve_format)
                     if momentum_beta > 0:
                         state['momentum_buffer'] = torch.zeros_like(p, memory_format=torch.preserve_format)
+                    if hessian_poweriter > 0:
+                        state['hessian_buffer'] = torch.zeros_like(p, memory_format=torch.preserve_format)  # added buffer for hessian approximation
                 
                 exp_avg_sq = state['exp_avg_sq']
                 state['step'] += 1
@@ -72,6 +76,15 @@ class Fusedbun(Optimizer):
                     exp_avg_sq = torch.where(mask, exp_avg_sq*beta_decay + (1-beta_decay)*grad.pow(2), exp_avg_sq)
                 else:
                     exp_avg_sq.mul_(beta_decay).addcmul_(grad, grad, value=1-beta_decay)
+
+                if hessian_poweriter > 0:
+                    #hessian approximation
+                    hessian_buffer = state['hessian_buffer']
+                    hessian_buffer.mul_(0).add_(grad, alpha=1)  # initialize the buffer with the gradient
+                    for _ in range(hessian_poweriter):
+                        hessian_buffer.mul_(grad.abs() + eps)  # multiply element wise with the gradient magnitude
+                        grad = hessian_buffer  # update the gradient with the Hessian approximation
+                    
 
                 denom = exp_avg_sq.sqrt().add_(eps)
                 grad_normalized = grad / denom if use_rms else grad
